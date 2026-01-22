@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Sizing Estimator</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Plotly -->
+    <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- HEADER -->
+        <header class="app-header">
+            <div class="header-content">
+                <h1>Market Sizing Estimator</h1>
+                <p>AI-powered TAM/SAM/SOM analysis using top-down, bottom-up, and value-theory methodologies — grounded in World Bank data.</p>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT CONTAINER -->
+        <main class="container">
+            
+            <!-- API SETTINGS -->
+            <section class="card mb-24">
+                <div class="row api-row">
+                    <div class="col-half">
+                        <label for="provider">AI Provider *</label>
+                        <select id="provider">
+                            <option value="Anthropic">Anthropic (Claude)</option>
+                            <option value="OpenAI">OpenAI (GPT-4)</option>
+                            <option value="Gemini">Google Gemini</option>
+                            <option value="Groq">Groq (Llama 3)</option>
+                        </select>
+                    </div>
+                    <div class="col-half">
+                        <label id="api-key-label" for="api-key">API Key not required for Mock Data</label>
+                        <input type="password" id="api-key" placeholder="Enter API Key" disabled>
+                    </div>
+                </div>
+            </section>
+
+            <!-- INPUT FORM (Hidden when report is showing) -->
+            <section id="form-section" class="card fade-in">
+                <h2>Define Your Market</h2>
+                
+                <form id="sizing-form">
+                    <div class="form-group">
+                        <label for="product">Product / Solution Description *</label>
+                        <textarea id="product" rows="4" placeholder="e.g. AI-powered project management platform for remote engineering teams. Automates sprint planning, standup summaries, and dependency tracking." required></textarea>
+                    </div>
+
+                    <!-- Row 1: Industry & Persona -->
+                    <div class="row">
+                        <div class="col-half">
+                            <div class="form-group">
+                                <label for="industry">Industry Vertical *</label>
+                                <select id="industry" required>
+                                    <option value="SaaS / B2B Software">SaaS / B2B Software</option>
+                                    <option value="E-Commerce / Retail">E-Commerce / Retail</option>
+                                    <option value="FinTech / Payments">FinTech / Payments</option>
+                                    <option value="HealthTech / Digital Health">HealthTech / Digital Health</option>
+                                    <option value="EdTech">EdTech</option>
+                                    <option value="AdTech / MarTech">AdTech / MarTech</option>
+                                    <option value="IT Infrastructure / Cloud">IT Infrastructure / Cloud</option>
+                                    <option value="Cybersecurity">Cybersecurity</option>
+                                    <option value="HR Tech">HR Tech</option>
+                                    <option value="LegalTech">LegalTech</option>
+                                    <option value="PropTech / Real Estate">PropTech / Real Estate</option>
+                                    <option value="Supply Chain / Logistics">Supply Chain / Logistics</option>
+                                    <option value="Consumer App / Social">Consumer App / Social</option>
+                                    <option value="Gaming">Gaming</option>
+                                    <option value="Clean Energy / ClimaTech">Clean Energy / ClimaTech</option>
+                                    <option value="Manufacturing / Industrial">Manufacturing / Industrial</option>
+                                    <option value="Agriculture Tech">Agriculture Tech</option>
+                                    <option value="Travel & Hospitality">Travel & Hospitality</option>
+                                    <option value="Media & Entertainment">Media & Entertainment</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-half">
+                            <div class="form-group">
+                                <label for="persona">Target Persona *</label>
+                                <input type="text" id="persona" placeholder="e.g. Engineering Managers at Series A-C startups" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Stage & Pricing Model -->
+                    <div class="row">
+                        <div class="col-half">
+                            <div class="form-group">
+                                <label for="stage">Company Stage *</label>
+                                <select id="stage" required>
+                                    <option value="Startup (Pre-PMF)">Startup (Pre-PMF)</option>
+                                    <option value="Startup (Post-PMF)">Startup (Post-PMF)</option>
+                                    <option value="SMB">SMB</option>
+                                    <option value="Mid-Market">Mid-Market</option>
+                                    <option value="Enterprise">Enterprise</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-half">
+                            <div class="form-group">
+                                <label for="pricing-model">Pricing Model *</label>
+                                <select id="pricing-model" required>
+                                    <option value="SaaS / Subscription (per user/month)">SaaS / Subscription (per user/month)</option>
+                                    <option value="SaaS / Subscription (per seat/year)">SaaS / Subscription (per seat/year)</option>
+                                    <option value="Transactional / Usage-based">Transactional / Usage-based</option>
+                                    <option value="Marketplace (% of GMV)">Marketplace (% of GMV)</option>
+                                    <option value="Freemium (conversion to paid)">Freemium (conversion to paid)</option>
+                                    <option value="Hardware + Software">Hardware + Software</option>
+                                    <option value="Professional Services">Professional Services</option>
+                                    <option value="Advertising / CPM">Advertising / CPM</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Geographies & Avg Price -->
+                    <div class="row" style="align-items: flex-start;">
+                        <div class="col-half">
+                            <div class="form-group custom-select-container">
+                                <label>Geographies * (Min 1, Max 10)</label>
+                                <div class="custom-select-trigger" id="geo-trigger">
+                                    <div id="geo-selected-tags" class="geo-tags-container"></div>
+                                    <span class="dropdown-arrow">▼</span>
+                                </div>
+                                <div class="custom-select-dropdown hidden" id="geo-dropdown">
+                                    <div class="geo-options">
+                                        <label class="geo-option"><input type="checkbox" value="United States" checked> United States</label>
+                                        <label class="geo-option"><input type="checkbox" value="United Kingdom"> United Kingdom</label>
+                                        <label class="geo-option"><input type="checkbox" value="India"> India</label>
+                                        <label class="geo-option"><input type="checkbox" value="Germany"> Germany</label>
+                                        <label class="geo-option"><input type="checkbox" value="France"> France</label>
+                                        <label class="geo-option"><input type="checkbox" value="Japan"> Japan</label>
+                                        <label class="geo-option"><input type="checkbox" value="China"> China</label>
+                                        <label class="geo-option"><input type="checkbox" value="Brazil"> Brazil</label>
+                                        <label class="geo-option"><input type="checkbox" value="Canada"> Canada</label>
+                                        <label class="geo-option"><input type="checkbox" value="Australia"> Australia</label>
+                                        <label class="geo-option"><input type="checkbox" value="Global"> Global</label>
+                                        <label class="geo-option"><input type="checkbox" value="Europe"> Europe</label>
+                                        <label class="geo-option"><input type="checkbox" value="Southeast Asia"> Southeast Asia</label>
+                                        <label class="geo-option"><input type="checkbox" value="Latin America"> Latin America</label>
+                                        <label class="geo-option"><input type="checkbox" value="Africa"> Africa</label>
+                                    </div>
+                                    <div class="geo-actions">
+                                        <span id="geo-error" class="error-text hidden">Max 10 allowed.</span>
+                                        <button type="button" id="btn-accept-geo" class="btn-primary" style="padding: 0.4rem 1rem; font-size: 0.85rem;">Accept</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-half">
+                            <div class="row">
+                                <div class="col-half" style="padding-left: 0;">
+                                    <div class="form-group">
+                                        <label for="avg-price">Avg Price ($) *</label>
+                                        <input type="number" id="avg-price" value="500" min="1" step="0.01" required>
+                                    </div>
+                                </div>
+                                <div class="col-half" style="padding-right: 0;">
+                                    <div class="form-group">
+                                        <label for="price-unit">Per</label>
+                                        <input type="text" id="price-unit" value="user/month" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="custom-research">Paste your own research / data (optional)</label>
+                        <textarea id="custom-research" rows="4" placeholder="Paste any industry reports, analyst estimates, competitor revenue figures, survey data, or your own assumptions here. The AI will incorporate them into the analysis."></textarea>
+                    </div>
+
+                    <button type="submit" id="submit-btn" class="btn-primary w-full">Run Analysis</button>
+                    
+                    <div id="loading-overlay" class="hidden">
+                        <div class="spinner"></div>
+                        <p id="loading-text">Analyzing market...</p>
+                    </div>
+                    <div id="error-msg" class="error hidden"></div>
+                </form>
+            </section>
+
+            <!-- REPORT DASHBOARD (Hidden initially) -->
+            <section id="report-section" class="hidden fade-in">
+                
+                <div class="flex-between mb-16">
+                    <h2 id="report-title" class="mb-0">TAM / SAM / SOM Analysis Overview</h2>
+                    <button id="btn-back" class="btn-secondary">← New Analysis</button>
+                </div>
+
+                <!-- Investor Narrative -->
+                <div class="investor-card mb-24">
+                    <h3>Investor Narrative</h3>
+                    <p id="r-investor-narrative"></p>
+                </div>
+
+                <div class="confidence-badge mb-24" id="r-confidence">
+                    Overall Confidence: <span id="r-confidence-val">Medium</span>
+                </div>
+
+                <!-- KPI Cards -->
+                <div class="row kpi-row mb-24" style="margin-bottom: 3rem;">
+                    <div class="col-third">
+                        <div class="kpi-card tam-card">
+                            <div class="kpi-top">
+                                <h4>Total Addressable Market</h4>
+                                <span>(TAM)</span>
+                                <div class="kpi-val" id="r-tam-mid">$0</div>
+                                <div class="kpi-ranges">
+                                    <span class="range-pill" id="r-tam-low">Low: $0</span>
+                                    <span class="range-pill" id="r-tam-high">High: $0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-third">
+                        <div class="kpi-card sam-card">
+                            <div class="kpi-top">
+                                <h4>Serviceable Addressable Market</h4>
+                                <span>(SAM)</span>
+                                <div class="kpi-val" id="r-sam-mid">$0</div>
+                                <div class="kpi-ranges">
+                                    <span class="range-pill" id="r-sam-low">Low: $0</span>
+                                    <span class="range-pill" id="r-sam-high">High: $0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-third">
+                        <div class="kpi-card som-card">
+                            <div class="kpi-top">
+                                <h4>Serviceable Obtainable Market</h4>
+                                <span>(SOM)</span>
+                                <div class="kpi-val" id="r-som-mid">$0</div>
+                                <div class="kpi-ranges">
+                                    <span class="range-pill" id="r-som-low">Low: $0</span>
+                                    <span class="range-pill" id="r-som-high">High: $0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Segmented Control / Tabs -->
+                <div class="tabs-container mb-24">
+                    <div class="tab-list">
+                        <button class="tab-btn active" data-target="tab-overview">Overview</button>
+                        <button class="tab-btn" data-target="tab-methods">Methodologies</button>
+                        <button class="tab-btn" data-target="tab-proj">5-Year Projection</button>
+                        <button class="tab-btn" data-target="tab-sens">Sensitivity</button>
+                        <button class="tab-btn" data-target="tab-risks">Risks</button>
+                        <button class="tab-btn" data-target="tab-sources">Sources</button>
+                    </div>
+                </div>
+
+                <!-- Tab Contents -->
+                <div class="tab-contents mb-32">
+                    
+                    <!-- Overview Tab -->
+                    <div id="tab-overview" class="tab-pane active">
+                        <p id="r-exec-summary" class="bold-text mb-24"></p>
+                        <div class="chart-card">
+                            <div id="plot-funnel"></div>
+                        </div>
+                        <div class="chart-card mt-16">
+                            <div id="plot-scenarios"></div>
+                        </div>
+                    </div>
+
+                    <!-- Methodologies Tab -->
+                    <div id="tab-methods" class="tab-pane hidden">
+                        <div id="methods-container"></div>
+                        <div class="chart-card mt-24">
+                            <div id="plot-methods"></div>
+                        </div>
+                    </div>
+
+                    <!-- Projection Tab -->
+                    <div id="tab-proj" class="tab-pane hidden">
+                        <div class="chart-card mb-24">
+                            <div id="plot-projection"></div>
+                        </div>
+                        <div class="table-container card">
+                            <table id="proj-table">
+                                <thead>
+                                    <tr>
+                                        <th>Year</th>
+                                        <th>TAM</th>
+                                        <th>SAM</th>
+                                        <th>SOM</th>
+                                        <th>CAGR</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Sensitivity Tab -->
+                    <div id="tab-sens" class="tab-pane hidden">
+                        <p class="mb-16">Adjust key assumptions to see how SOM changes.</p>
+                        <div id="sens-container" class="row wrap"></div>
+                    </div>
+
+                    <!-- Risks Tab -->
+                    <div id="tab-risks" class="tab-pane hidden">
+                        <h3>⚠️ Key Risks & Sizing Limitations</h3>
+                        <div id="risks-container"></div>
+                    </div>
+
+                    <!-- Sources Tab -->
+                    <div id="tab-sources" class="tab-pane hidden card">
+                        <h3>📚 Data Sources & Citations</h3>
+                        <div id="wb-sources-container" class="mb-16">
+                            <strong>World Bank Data Used:</strong>
+                            <ul id="wb-sources-list"></ul>
+                        </div>
+                        <div>
+                            <strong>Additional Sources:</strong>
+                            <ul>
+                                <li><span id="ai-provider-name">AI</span> — industry knowledge and AI-estimated parameters</li>
+                                <li id="user-source-li" class="hidden">User-provided research and data</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr class="mb-24">
+
+                <!-- Exports Section -->
+                <div class="export-section">
+                    <h3 class="mb-16">Export</h3>
+                    <div class="row gap-8 mb-16">
+                        <button class="btn-export" data-fmt="json">JSON</button>
+                        <button class="btn-export" data-fmt="excel">Excel</button>
+                        <button class="btn-export" data-fmt="pdf">PDF</button>
+                        <button class="btn-export" data-fmt="powerpoint">PowerPoint</button>
+                    </div>
+                </div>
+
+            </section>
+
+        </main>
+    </div>
+    
+    <script src="/app.js"></script>
+</body>
+</html>

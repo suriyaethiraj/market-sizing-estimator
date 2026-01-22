@@ -1,0 +1,109 @@
+Provider: Groq
+Model Used: qwen/qwen3.8-27b
+Raw Output: '```json
+{
+  "title": "Market Sizing: AI-powered project management platform for remote engineering teams in US, UK, Canada",
+  "product_description": "AI-powered project management platform for remote engineering teams. Automates sprint planning, standup summaries, and dependency tracking.",
+  "industry": "SaaS / B2B Software",
+  "geographies": [
+    "United States",
+    "United Kingdom",
+    "Canada"
+  ],
+  "methodology_results": [
+    {
+      "methodology": "Top-Down",
+      "tam": {
+        "low": 4200,
+        "mid": 5000,
+        "high": 6000,
+        "unit": "USD millions"
+      },
+      "sam": {
+        "low": 180,
+        "mid": 250,
+        "high": 350,
+        "unit": "USD millions"
+      },
+      "som": {
+        "low": 15,
+        "mid": 25,
+        "high": 40,
+        "unit": "USD millions"
+      },
+      "key_assumptions": [
+        {
+          "label": "Global PM Software Market Size (2024)",
+          "value": "~$15,000M",
+          "source": "Industry report (Gartner/Estimate)",
+          "confidence": "Medium"
+        },
+        {
+          "label": "North America + UK Market Share",
+          "value": "33.3%",
+          "source": "AI estimate",
+          "confidence": "High"
+        },
+        {
+          "label": "Target Geography Penetration",
+          "value": "33.3% of Regional Market",
+          "source": "World Bank (Population/Economy share)",
+          "confidence": "High"
+        },
+        {
+          "label": "Remote Engineering Team Adoption Rate",
+          "value": "5.0%",
+          "source": "Industry report (Gartner AI adoption trends)",
+          "confidence": "Medium"
+        },
+        {
+          "label": "Series A-C Startup Focus",
+          "value": "10.0% of Addressable Remote Teams",
+          "source": "AI estimate",
+          "confidence": "Medium"
+        }
+      ],
+      "narrative": "Starting with a global project management software market of ~$15B, we filter down to the US, UK, and Canada (~33% share). We then apply a 5% penetration rate for remote engineering teams and further narrow to Series A-C companies (10% of remote teams), resulting in a Serviceable Market of ~$250M. The Serviceable Obtainable Market is estimated at 10% of SAM for a pre-PMF startup."
+    },
+    {
+      "methodology": "Bottom-Up",
+      "tam": {
+        "low": 450,
+        "mid": 600,
+        "high": 800,
+        "unit": "USD millions"
+      },
+      "sam": {
+        "low": 60,
+        "mid": 95,
+        "high": 130,
+        "unit": "USD millions"
+      },
+      "som": {
+        "low": 5,
+        "mid": 10,
+        "high": 18,
+        "unit": "USD millions"
+      },
+      "key_assumptions": [
+        {
+          "label": "Number of Series A-C Startups (US, UK, Can)",
+          "value": "3,000 companies",
+          "source": "AI estimate (Crunchbase/Industry knowledge)",
+          "confidence": "Medium"
+        },
+        {
+          "label": "Average Engineers per Company",
+          "value": "30 engineers",
+          "source": "AI estimate",
+          "confidence": "Medium"
+        },
+        {
+          "label": "Total Addressable Engineers",
+          "value": "90,000 engineers",
+          "source": "Calculated (3,000 × 30)",
+          "confidence": "High"
+        },
+        {
+          "label": "Annual Price per User",
+          "value": "$36'

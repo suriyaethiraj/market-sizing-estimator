@@ -1,0 +1,15 @@
+anthropic>=0.27.0
+streamlit>=1.35.0
+pydantic>=2.7.0
+pandas>=2.2.0
+plotly>=5.22.0
+requests>=2.32.0
+reportlab>=4.2.0
+openpyxl>=3.1.2
+python-pptx>=0.6.23
+rich>=13.7.0
+pip-audit>=2.7.0
+openai>=1.0.0
+google-genai>=0.1.0
+groq>=0.9.0
+json-repair
