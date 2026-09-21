@@ -51,7 +51,7 @@ flowchart TD
 
     %% Export Flow
     App -.->|A. POST /api/export| Exporters
-    Exporters -.->|B. Returns Blob (PDF/XLSX/PPTX)| App
+    Exporters -.->|B. Returns Blob PDF or Excel or PPTX| App
 ```
 
 ## Component Breakdown
