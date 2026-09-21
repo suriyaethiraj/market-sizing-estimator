@@ -19,16 +19,16 @@ flowchart TD
     end
 
     subgraph Server [Backend - FastAPI]
-        ServerPY[server.py\nAPI Router]:::backend
-        Schema[schema.py\nPydantic Models]:::backend
-        Analyzer[analyzer.py\nCore Logic]:::backend
-        WB[worldbank.py\nData Fetcher]:::backend
-        Exporters[exporters.py\nFile Generation]:::backend
+        ServerPY["server.py<br>API Router"]:::backend
+        Schema["schema.py<br>Pydantic Models"]:::backend
+        Analyzer["analyzer.py<br>Core Logic"]:::backend
+        WB["worldbank.py<br>Data Fetcher"]:::backend
+        Exporters["exporters.py<br>File Generation"]:::backend
     end
 
     subgraph External [External APIs]
-        WorldBankAPI[World Bank Data API\n(Macroeconomics)]:::external
-        LLM[AI Providers\nOpenAI / Anthropic / Groq / Gemini]:::external
+        WorldBankAPI["World Bank Data API<br>(Macroeconomics)"]:::external
+        LLM["AI Providers<br>OpenAI / Anthropic / Groq / Gemini"]:::external
     end
 
     %% Data Flow
